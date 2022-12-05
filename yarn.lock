@@ -237,7 +237,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.11.11":
+"@types/node-isbn@npm:^1.6.2":
+  version: 1.6.2
+  resolution: "@types/node-isbn@npm:1.6.2"
+  dependencies:
+    "@types/node": "*"
+    axios: ^0.21.1
+  checksum: 0bb90be9504e9b8acf6e1298f293650e6cb0bba743a5af0306540a77daad27486e947fc917a5cd0b237f011a4108135d754cc54c3f1903e0ebcb67ad7b38910a
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:*, @types/node@npm:18.11.11":
   version: 18.11.11
   resolution: "@types/node@npm:18.11.11"
   checksum: c4b1176a8f1714a3ee3fc2a5e1d568b0cd50209000282db5c68154b3c975952928dbb834ef3a0ce55bd7b345ae29f2cbf4a34635a070294d135a24254231386a
@@ -337,6 +347,26 @@ __metadata:
     "@typescript-eslint/types": 5.45.1
     eslint-visitor-keys: ^3.3.0
   checksum: 725a434fb05010b6ead7e880fa1fcdb4dbc7421b80667e96ad27fcfb3c2b2b0edde64be488740577dd147547fc4a9eac52e2602eb6a8a261ee14a917d4a50c4f
+  languageName: node
+  linkType: hard
+
+"@zxing/library@npm:^0.19.1":
+  version: 0.19.1
+  resolution: "@zxing/library@npm:0.19.1"
+  dependencies:
+    "@zxing/text-encoding": ~0.9.0
+    ts-custom-error: ^3.0.0
+  dependenciesMeta:
+    "@zxing/text-encoding":
+      optional: true
+  checksum: ed650e4afc74560950efad3d1479f4bcd9878b6baadd4ac9280cec45bdbeba957bb1185cde7858e49493b3f0052d25bd0be3a1c277433e4e09e1f29018aec2f3
+  languageName: node
+  linkType: hard
+
+"@zxing/text-encoding@npm:~0.9.0":
+  version: 0.9.0
+  resolution: "@zxing/text-encoding@npm:0.9.0"
+  checksum: c23b12aee7639382e4949961304a1294776afaffa40f579e09ffecd0e5e68cf26ef3edd75009de46da8a536e571448755ca68b3e2ea707d53793c0edb2e2c34a
   languageName: node
   linkType: hard
 
@@ -471,6 +501,15 @@ __metadata:
   version: 4.5.2
   resolution: "axe-core@npm:4.5.2"
   checksum: 4068f183b2ef1db7e5a75606032c238781abfaa34ab4c23177e17f7dff8cc83f175e887b52689d20d88d2d4f001cbf632bd98925850026fe1d9abc739cabcf16
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.21.1":
+  version: 0.21.4
+  resolution: "axios@npm:0.21.4"
+  dependencies:
+    follow-redirects: ^1.14.0
+  checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
   languageName: node
   linkType: hard
 
@@ -1118,6 +1157,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.14.0":
+  version: 1.15.2
+  resolution: "follow-redirects@npm:1.15.2"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: faa66059b66358ba65c234c2f2a37fcec029dc22775f35d9ad6abac56003268baf41e55f9ee645957b32c7d9f62baf1f0b906e68267276f54ec4b4c597c2b190
+  languageName: node
+  linkType: hard
+
 "fs.realpath@npm:^1.0.0":
   version: 1.0.0
   resolution: "fs.realpath@npm:1.0.0"
@@ -1359,13 +1408,18 @@ __metadata:
   resolution: "importer@workspace:."
   dependencies:
     "@types/node": 18.11.11
+    "@types/node-isbn": ^1.6.2
     "@types/react": 18.0.26
     "@types/react-dom": 18.0.9
+    "@zxing/library": ^0.19.1
     eslint: 8.29.0
     eslint-config-next: 13.0.6
     next: 13.0.6
+    node-isbn: ^1.6.1
+    prettier: ^2.8.0
     react: 18.2.0
     react-dom: 18.2.0
+    react-zxing: ^1.0.5
     typescript: 4.9.3
   languageName: unknown
   linkType: soft
@@ -1826,6 +1880,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-isbn@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "node-isbn@npm:1.6.1"
+  dependencies:
+    axios: ^0.21.1
+  checksum: 8cb5670bdb80fc35df56725f3e5ab09c0da6e03278bcb08b00296033f0dc1606095edf97553219e7eb2c86bc6a19ecefcb203db9b8cd72517ad7df9397db83e4
+  languageName: node
+  linkType: hard
+
 "object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
@@ -2030,6 +2093,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier@npm:^2.8.0":
+  version: 2.8.0
+  resolution: "prettier@npm:2.8.0"
+  bin:
+    prettier: bin-prettier.js
+  checksum: 72004ce0cc9bb097daf3e3833f62495768724392c1d5b178dd47372337616e9e50ecbb0804f236596223f7b5eb1bbe69cefc8957dca21112c5777e77ef73a564
+  languageName: node
+  linkType: hard
+
 "prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
@@ -2071,6 +2143,18 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
+  languageName: node
+  linkType: hard
+
+"react-zxing@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "react-zxing@npm:1.0.5"
+  dependencies:
+    "@zxing/library": ^0.19.1
+  peerDependencies:
+    react: ^16.8.0  || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
+  checksum: 14660e19470df942e1466f89496e71350e0f4ad37ab3442870fcf7db4ded362265ef6f5f056a37ee3c788131e2052d9fb2a01f2083f85caf5a69ef72864beedf
   languageName: node
   linkType: hard
 
@@ -2415,6 +2499,13 @@ __metadata:
   dependencies:
     is-number: ^7.0.0
   checksum: f76fa01b3d5be85db6a2a143e24df9f60dd047d151062d0ba3df62953f2f697b16fe5dad9b0ac6191c7efc7b1d9dcaa4b768174b7b29da89d4428e64bc0a20ed
+  languageName: node
+  linkType: hard
+
+"ts-custom-error@npm:^3.0.0":
+  version: 3.3.1
+  resolution: "ts-custom-error@npm:3.3.1"
+  checksum: 50a1e825fced68d70049bd8d282379a635e43aa023a370fa8e736b12a6edba7f18a2d731fa194ac35303a8b625be56e121bdb31d8a0318250d1a8b277059fce3
   languageName: node
   linkType: hard
 
