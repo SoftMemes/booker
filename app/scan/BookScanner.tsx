@@ -1,45 +1,32 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { BarcodeFormat } from '@zxing/library'
 import { DecodeHintType, useZxing } from 'react-zxing'
-import isbnResolver from 'node-isbn'
-
-const resolveBook = async (isbn: string) => {
-  const result = isbnResolver.resolve(isbn)
-  console.log('Resolved', result)
-  return result
-}
+import { BookImportState, useBookImporter } from './useBookImporter'
 
 const hints = new Map()
 hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13])
 
+function statusIcon(status: BookImportState['status']): string {
+  switch (status) {
+    case 'failed':
+      return '❌'
+    case 'loading':
+      return '⌛'
+    case 'read':
+      return '✅'
+  }
+}
+
 export default function Scan() {
-  const [result, setResult] = useState('')
-  const [resolving, setResolving] = useState(false)
+  const { books, importBook } = useBookImporter()
   const { ref, start } = useZxing({
     timeBetweenDecodingAttempts: 100,
     hints,
     onResult(result) {
       const isbn = result.getText()
-      const process = async () => {
-        if (resolving) {
-          return
-        }
-
-        setResolving(true)
-        try {
-          console.log(`Reading ${isbn}`)
-          setResult(isbn)
-          const data = await resolveBook(isbn)
-          setResult(`${data.title} by ${data.authors.join(',')}`)
-        } catch (err: any) {
-          setResult('Error: ' + err.message)
-        } finally {
-          setResolving(false)
-        }
-      }
-      process()
+      importBook(isbn)
     },
     onError(error) {
       console.log('Fail fail', error)
@@ -55,7 +42,14 @@ export default function Scan() {
       <video ref={ref} />
       <p>
         <span>Last result:</span>
-        <span>{result}</span>
+        <ul>
+          {books.map(bs => (
+            <li key={bs.isbn}>
+              {statusIcon(bs.status)} {bs.isbn}:{' '}
+              {bs.data ? `${bs.data.title} by ${bs.data.authors[0]}` : null}
+            </li>
+          ))}
+        </ul>
       </p>
     </>
   )
