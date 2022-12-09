@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "es2021",
+    "lib": ["dom", "dom.iterable", "es2021"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/public/*": ["./public/*"]
+    },
+    "noErrorTruncation": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,

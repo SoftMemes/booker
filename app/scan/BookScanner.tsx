@@ -3,7 +3,10 @@
 import { useEffect } from 'react'
 import { BarcodeFormat } from '@zxing/library'
 import { DecodeHintType, useZxing } from 'react-zxing'
-import { BookImportState, useBookImporter } from './useBookImporter'
+import {
+  BookImportState,
+  useBookImporter,
+} from '@/books/importer/useBookImporter'
 
 const hints = new Map()
 hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13])
@@ -16,6 +19,8 @@ function statusIcon(status: BookImportState['status']): string {
       return '⌛'
     case 'read':
       return '✅'
+    default:
+      return '?'
   }
 }
 
@@ -40,7 +45,7 @@ export default function Scan() {
   return (
     <>
       <video ref={ref} />
-      <p>
+      <div>
         <span>Last result:</span>
         <ul>
           {books.map(bs => (
@@ -50,7 +55,7 @@ export default function Scan() {
             </li>
           ))}
         </ul>
-      </p>
+      </div>
     </>
   )
 }

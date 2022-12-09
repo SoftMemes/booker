@@ -1,8 +1,8 @@
 export interface Book {
   isbn: string
   authors: string[]
-  categories: string[]
-  description: string | undefined
+  categories?: string[]
+  description?: string
   thumbnailUrl?: string
   language: string
   pageCount?: number | undefined

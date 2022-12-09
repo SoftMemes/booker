@@ -1,6 +1,7 @@
-import { Book } from './book'
 import { useState } from 'react'
 import isbnResolver from 'node-isbn'
+import { Book } from '../book'
+import { importBookInfo } from '@/books/importer/bookImporter'
 
 export interface BookImportState {
   isbn: string
@@ -26,21 +27,11 @@ export const useBookImporter = () => {
       status: 'loading',
     }))
     try {
-      const result = await isbnResolver.resolve(isbn)
+      const book = await importBookInfo(isbn)
       updateBookState(isbn, () => ({
         isbn,
         status: 'read',
-        data: {
-          title: result.title,
-          authors: result.authors,
-          categories: result.categories,
-          description: result.description,
-          thumbnailUrl: result.imageLinks?.thumbnail,
-          language: result.language,
-          pageCount: result.pageCount,
-          publisher: result.publisher,
-          publishedDate: result.publishedDate,
-        },
+        data: book,
       }))
     } catch (err) {
       updateBookState(isbn, () => ({
