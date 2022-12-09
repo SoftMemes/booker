@@ -1,16 +1,12 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { BarcodeFormat } from '@zxing/library'
-import { DecodeHintType, useZxing } from 'react-zxing'
 import {
   BookImportState,
   useBookImporter,
 } from '@/books/importer/useBookImporter'
 import Scanner from '@/barcodes/Scanner'
-
-const hints = new Map()
-hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13])
 
 function statusIcon(status: BookImportState['status']): string {
   switch (status) {
@@ -27,23 +23,7 @@ function statusIcon(status: BookImportState['status']): string {
 
 export default function Scan() {
   const { books, importBook } = useBookImporter()
-  const { ref, start } = useZxing({
-    timeBetweenDecodingAttempts: 100,
-    hints,
-    onResult(result) {
-      const isbn = result.getText()
-      importBook(isbn)
-    },
-    onError(error) {
-      console.log('Fail fail', error)
-    },
-  })
-
   const scannerRef = useRef(null)
-
-  useEffect(() => {
-    start()
-  }, [])
 
   return (
     <>

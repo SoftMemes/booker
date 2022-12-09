@@ -44,6 +44,8 @@ const sanitizeDate = (date: string) => {
 
   if (dateBits.length === 3) {
     return date
+  } else if (dateBits.length === 2) {
+    return `${dateBits[0]}-${dateBits[1]}-01`
   } else if (dateBits.length === 1) {
     return `${dateBits[0]}-01-01`
   } else {
@@ -68,7 +70,7 @@ export const registerBook = async (book: Book): Promise<boolean> => {
   const properties = {
     Title: makeTitle(book.title),
     ISBN: makeText(book.isbn),
-    Publisher: makeSelect(book.publisher),
+    Publisher: book.publisher ? makeSelect(book.publisher) : undefined,
     Authors: makeMultiSelect(book.authors),
     Description: book.description ? makeText(book.description) : undefined,
     Categories: book.categories

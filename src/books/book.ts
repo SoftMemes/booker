@@ -7,6 +7,6 @@ export interface Book {
   language: string
   pageCount?: number | undefined
   publishedDate: string
-  publisher: string
+  publisher?: string
   title: string
 }

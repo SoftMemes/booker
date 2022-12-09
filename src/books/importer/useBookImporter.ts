@@ -37,6 +37,7 @@ export const useBookImporter = () => {
         data: book,
       }))
     } catch (err) {
+      console.error('Error importing', err)
       updateBookState(isbn, () => ({
         isbn,
         status: 'failed',

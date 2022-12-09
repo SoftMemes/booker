@@ -10,7 +10,7 @@ export const registerBookRequestSchema = object({
   language: string(),
   pageCount: optional(number()),
   publishedDate: string(),
-  publisher: string(),
+  publisher: optional(string()),
   title: string(),
 })
 
