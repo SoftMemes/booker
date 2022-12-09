@@ -51,6 +51,8 @@ const sanitizeDate = (date: string) => {
   }
 }
 
+const sanitizeCategory = (category: string) => category.replace(',', '-')
+
 export const registerBook = async (book: Book): Promise<boolean> => {
   const notionApiKey = process.env.NOTION_API_KEY!
   const databaseId = process.env.NOTION_DATABASE_ID!
@@ -69,7 +71,11 @@ export const registerBook = async (book: Book): Promise<boolean> => {
     Publisher: makeSelect(book.publisher),
     Authors: makeMultiSelect(book.authors),
     Description: book.description ? makeText(book.description) : undefined,
-    Categories: book.categories ? makeMultiSelect(book.categories) : undefined,
+    Categories: book.categories
+      ? makeMultiSelect(
+          book.categories.map(category => sanitizeCategory(category)),
+        )
+      : undefined,
     'Published Date': makeDate(sanitizeDate(book.publishedDate)),
     Language: makeSelect(book.language),
   }

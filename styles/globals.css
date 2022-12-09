@@ -24,3 +24,11 @@ a {
     background: black;
   }
 }
+
+video {
+  width: 100% !important;
+}
+
+canvas {
+  display: none;
+}

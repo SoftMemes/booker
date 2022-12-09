@@ -16,9 +16,11 @@ export const useBookImporter = () => {
     isbn: string,
     updater: (state: BookImportState) => BookImportState,
   ) => {
-    const existingState = books.find(bs => bs.isbn === isbn)
-    const newState = updater(existingState ?? { isbn, status: 'loading' })
-    setBooks([newState, ...books.filter(bs => bs.isbn !== isbn)])
+    setBooks(books => {
+      const existingState = books.find(bs => bs.isbn === isbn)
+      const newState = updater(existingState ?? { isbn, status: 'loading' })
+      return [newState, ...books.filter(bs => bs.isbn !== isbn)]
+    })
   }
 
   const loadBookInfo = async (isbn: string) => {

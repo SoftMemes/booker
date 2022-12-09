@@ -36,7 +36,7 @@ const defaultConstraints: ConstraintsSettings = {
 }
 
 export interface LocatorSettings {
-  patchSize: 'small' | 'medium'
+  patchSize: 'x-small' | 'small' | 'medium' | 'large' | 'x-large'
   halfSample: boolean
 }
 
@@ -143,6 +143,7 @@ const Scanner = ({
         },
         locator,
         numOfWorkers,
+        frequency: 60,
         decoder: { readers: decoders },
         locate,
       },

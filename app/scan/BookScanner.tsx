@@ -47,6 +47,21 @@ export default function Scan() {
 
   return (
     <>
+      <div ref={scannerRef} style={{ border: '1px solid red' }}>
+        <Scanner
+          scannerRef={scannerRef}
+          onDetected={result => importBook(result)}
+          constraints={{
+            width: 1920,
+            height: 1920,
+          }}
+          locator={{
+            patchSize: 'small',
+            halfSample: true,
+          }}
+          facingMode="environment"
+        />
+      </div>
       <div>
         <span>Last result:</span>
         <ul>
@@ -58,34 +73,6 @@ export default function Scan() {
           ))}
         </ul>
       </div>
-      <div
-        ref={scannerRef}
-        style={{ position: 'relative', border: '3px solid red' }}
-      >
-        <canvas
-          className="drawingBuffer"
-          style={{
-            position: 'absolute',
-            top: '0px',
-            // left: '0px',
-            // height: '100%',
-            width: '100%',
-            border: '3px solid green',
-          }}
-          width="1920"
-          height="1200"
-        />
-
-        <Scanner
-          scannerRef={scannerRef}
-          onDetected={result => importBook(result)}
-          constraints={{
-            width: 1920,
-            height: 1200,
-          }}
-          facingMode="user"
-        />
-      </div>{' '}
     </>
   )
 }
