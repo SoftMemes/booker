@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@ericblade/quagga2": "^1.7.7",
     "@mui/material": "^5.10.17",
     "@notionhq/client": "^2.2.2",
     "@types/node": "18.11.12",
