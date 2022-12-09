@@ -1,8 +1,8 @@
+// Lovingly borrowed (stolen) from https://github.com/ericblade/quagga2-react-example/blob/master/src/components/Scanner.js and tweaked
 import React, { useCallback, useLayoutEffect } from 'react'
-import PropTypes from 'prop-types'
-import Quagga from '@ericblade/quagga2'
+import Quagga, { QuaggaJSResultObject } from '@ericblade/quagga2'
 
-function getMedian(arr) {
+function getMedian(arr: number[]) {
   arr.sort((a, b) => a - b)
   const half = Math.floor(arr.length / 2)
   if (arr.length % 2 === 1) {
@@ -11,25 +11,54 @@ function getMedian(arr) {
   return (arr[half - 1] + arr[half]) / 2
 }
 
-function getMedianOfCodeErrors(decodedCodes) {
+function getMedianOfCodeErrors(
+  decodedCodes: {
+    error?: number
+    code: number
+    start: number
+    end: number
+  }[],
+) {
   const errors = decodedCodes
     .filter(x => x.error !== undefined)
-    .map(x => x.error)
-  const medianOfErrors = getMedian(errors)
-  return medianOfErrors
+    .map(x => x.error!)
+  return getMedian(errors)
 }
 
-const defaultConstraints = {
+export interface ConstraintsSettings {
+  width: number
+  height: number
+}
+
+const defaultConstraints: ConstraintsSettings = {
   width: 640,
   height: 480,
 }
 
-const defaultLocatorSettings = {
+export interface LocatorSettings {
+  patchSize: 'small' | 'medium'
+  halfSample: boolean
+}
+
+const defaultLocatorSettings: LocatorSettings = {
   patchSize: 'medium',
   halfSample: true,
 }
 
 const defaultDecoders = ['ean_reader']
+
+export interface Props {
+  onDetected: (value: string) => void
+  scannerRef: any
+  cameraId?: string
+  facingMode?: string
+  numOfWorkers?: number
+  decoders?: string[]
+  onScannerReady?: () => void
+  constraints?: ConstraintsSettings
+  locator?: LocatorSettings
+  locate?: boolean
+}
 
 const Scanner = ({
   onDetected,
@@ -42,35 +71,33 @@ const Scanner = ({
   numOfWorkers = navigator.hardwareConcurrency || 0,
   decoders = defaultDecoders,
   locate = true,
-}) => {
+}: Props) => {
   const errorCheck = useCallback(
-    result => {
+    (result: QuaggaJSResultObject) => {
       if (!onDetected) {
         return
       }
       const err = getMedianOfCodeErrors(result.codeResult.decodedCodes)
       // if Quagga is at least 75% certain that it read correctly, then accept the code.
-      if (err < 0.25) {
+      if (result.codeResult.code && err < 0.25) {
         onDetected(result.codeResult.code)
       }
     },
     [onDetected],
   )
-
-  const handleProcessed = result => {
+  const handleProcessed = (result: QuaggaJSResultObject) => {
     const drawingCtx = Quagga.canvas.ctx.overlay
     const drawingCanvas = Quagga.canvas.dom.overlay
     drawingCtx.font = '24px Arial'
     drawingCtx.fillStyle = 'green'
 
     if (result) {
-      // console.warn('* quagga onProcessed', result);
       if (result.boxes) {
         drawingCtx.clearRect(
           0,
           0,
-          parseInt(drawingCanvas.getAttribute('width')),
-          parseInt(drawingCanvas.getAttribute('height')),
+          parseInt(drawingCanvas.getAttribute('width')!),
+          parseInt(drawingCanvas.getAttribute('height')!),
         )
         result.boxes
           .filter(box => box !== result.box)
@@ -151,19 +178,6 @@ const Scanner = ({
     locate,
   ])
   return null
-}
-
-Scanner.propTypes = {
-  onDetected: PropTypes.func.isRequired,
-  scannerRef: PropTypes.object.isRequired,
-  onScannerReady: PropTypes.func,
-  cameraId: PropTypes.string,
-  facingMode: PropTypes.string,
-  constraints: PropTypes.object,
-  locator: PropTypes.object,
-  numOfWorkers: PropTypes.number,
-  decoders: PropTypes.array,
-  locate: PropTypes.bool,
 }
 
 export default Scanner

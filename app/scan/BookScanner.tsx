@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { BarcodeFormat } from '@zxing/library'
 import { DecodeHintType, useZxing } from 'react-zxing'
 import {
   BookImportState,
   useBookImporter,
 } from '@/books/importer/useBookImporter'
+import Scanner from '@/barcodes/Scanner'
 
 const hints = new Map()
 hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13])
@@ -38,13 +39,14 @@ export default function Scan() {
     },
   })
 
+  const scannerRef = useRef(null)
+
   useEffect(() => {
     start()
   }, [])
 
   return (
     <>
-      <video ref={ref} />
       <div>
         <span>Last result:</span>
         <ul>
@@ -56,6 +58,34 @@ export default function Scan() {
           ))}
         </ul>
       </div>
+      <div
+        ref={scannerRef}
+        style={{ position: 'relative', border: '3px solid red' }}
+      >
+        <canvas
+          className="drawingBuffer"
+          style={{
+            position: 'absolute',
+            top: '0px',
+            // left: '0px',
+            // height: '100%',
+            width: '100%',
+            border: '3px solid green',
+          }}
+          width="1920"
+          height="1200"
+        />
+
+        <Scanner
+          scannerRef={scannerRef}
+          onDetected={result => importBook(result)}
+          constraints={{
+            width: 1920,
+            height: 1200,
+          }}
+          facingMode="user"
+        />
+      </div>{' '}
     </>
   )
 }
