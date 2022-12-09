@@ -9,8 +9,9 @@ export const makeHandler =
     handler: (request: TReq) => Promise<TRes>,
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('HEEEEER' + req)
-    const [err, typedRequest] = requestSchema.validate(req, { coerce: true })
+    const [err, typedRequest] = requestSchema.validate(req.body, {
+      coerce: true,
+    })
     if (err) {
       res.status(400).send(err.message)
       return
@@ -23,7 +24,7 @@ export const makeHandler =
       res.status(500).send('Server returned bad response')
     }
 
-    res.status(200).send(response)
+    res.json(response)
   }
 
 export const makeClient =
@@ -46,8 +47,9 @@ export const makeClient =
       method,
       data: request,
     })
+
     const [responseValidationErr, typedResponse] = responseSchema.validate(
-      response,
+      response.data,
       { coerce: true },
     )
 

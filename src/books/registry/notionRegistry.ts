@@ -1,22 +1,39 @@
 import { Client } from '@notionhq/client'
 import { Book } from '../book'
 
+const makeText = (text: string) => ({
+  rich_text: [
+    {
+      text: {
+        content: text,
+      },
+    },
+  ],
+})
+
+const makeTitle = (title: string) => ({
+  title: [
+    {
+      text: {
+        content: title,
+      },
+    },
+  ],
+})
+
 const makeSelect = (name: string) => ({
-  type: 'select',
   select: {
     name,
   },
 })
 
 const makeMultiSelect = (names: string[]) => ({
-  type: 'multi_select',
   multi_select: names.map(name => ({
     name,
   })),
 })
 
 const makeDate = (date: string) => ({
-  type: 'date',
   date: {
     start: date,
   },
@@ -35,12 +52,12 @@ export const registerBook = async (book: Book): Promise<boolean> => {
   })
 
   const properties = {
-    Title: book.title,
-    ISBN: book.isbn,
+    Title: makeTitle(book.title),
+    ISBN: makeText(book.isbn),
     Publisher: makeSelect(book.publisher),
     Authors: makeMultiSelect(book.authors),
-    Description: book.description,
-    Categories: makeMultiSelect(book.categories),
+    Description: book.description ? makeText(book.description) : undefined,
+    Categories: book.categories ? makeMultiSelect(book.categories) : undefined,
     'Published Date': makeDate(book.publishedDate),
     Language: makeSelect(book.language),
   }
@@ -50,6 +67,9 @@ export const registerBook = async (book: Book): Promise<boolean> => {
       page_id: existing.results[0].id,
       // NOTE: Type definitions are somehow not working, much weirdness
       properties: properties as any,
+      icon: book.thumbnailUrl
+        ? { external: { url: book.thumbnailUrl } }
+        : undefined,
     })
     return false
   } else {
@@ -57,6 +77,9 @@ export const registerBook = async (book: Book): Promise<boolean> => {
       parent: { database_id: databaseId },
       // NOTE: Type definitions are somehow not working, much weirdness
       properties: properties as any,
+      icon: book.thumbnailUrl
+        ? { external: { url: book.thumbnailUrl } }
+        : undefined,
     })
     return true
   }
