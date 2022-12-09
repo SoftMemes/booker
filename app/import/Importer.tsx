@@ -22,7 +22,6 @@ export const Importer = () => {
     toast.promise(
       async () => {
         const book = await importBookInfo(fields.isbn)
-        console.log('BOOOOOK', book)
         await registerBookClient(book)
       },
       {

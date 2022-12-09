@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import isbnResolver from 'node-isbn'
 import { Book } from '../book'
 import { importBookInfo } from '@/books/importer/bookImporter'
+import { registerBookClient } from '@/api/books'
 
 export interface BookImportState {
   isbn: string
@@ -28,6 +28,7 @@ export const useBookImporter = () => {
     }))
     try {
       const book = await importBookInfo(isbn)
+      await registerBookClient(book)
       updateBookState(isbn, () => ({
         isbn,
         status: 'read',

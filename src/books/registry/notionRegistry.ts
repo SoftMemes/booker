@@ -39,6 +39,18 @@ const makeDate = (date: string) => ({
   },
 })
 
+const sanitizeDate = (date: string) => {
+  const dateBits = date.split('-')
+
+  if (dateBits.length === 3) {
+    return date
+  } else if (dateBits.length === 1) {
+    return `${dateBits[0]}-01-01`
+  } else {
+    throw new Error('Invalid date: ' + date)
+  }
+}
+
 export const registerBook = async (book: Book): Promise<boolean> => {
   const notionApiKey = process.env.NOTION_API_KEY!
   const databaseId = process.env.NOTION_DATABASE_ID!
@@ -58,7 +70,7 @@ export const registerBook = async (book: Book): Promise<boolean> => {
     Authors: makeMultiSelect(book.authors),
     Description: book.description ? makeText(book.description) : undefined,
     Categories: book.categories ? makeMultiSelect(book.categories) : undefined,
-    'Published Date': makeDate(book.publishedDate),
+    'Published Date': makeDate(sanitizeDate(book.publishedDate)),
     Language: makeSelect(book.language),
   }
 
