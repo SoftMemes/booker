@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef } from 'react'
-import { BarcodeFormat } from '@zxing/library'
 import {
   BookImportState,
   useBookImporter,
