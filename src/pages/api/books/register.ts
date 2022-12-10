@@ -1,4 +1,4 @@
-import { makeHandler } from '@/utils/apis'
+import { makeHandler } from '@/utils/apis/makeHandler'
 import {
   registerBookRequestSchema,
   registerBookResponseSchema,
@@ -8,8 +8,8 @@ import { registerBook } from '@/books/registry/notionRegistry'
 export default makeHandler(
   registerBookRequestSchema,
   registerBookResponseSchema,
-  async book => {
-    const created = await registerBook(book)
+  async (book, session) => {
+    const created = await registerBook(book, session.accessToken)
     return { created }
   },
 )

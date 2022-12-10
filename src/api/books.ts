@@ -1,5 +1,5 @@
 import { array, boolean, number, object, optional, string } from 'superstruct'
-import { makeClient } from '@/utils/apis'
+import { makeClient } from '@/utils/apis/makeClient'
 
 export const registerBookRequestSchema = object({
   isbn: string(),

@@ -1,31 +1,5 @@
 import { Struct } from 'superstruct'
-import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
-
-export const makeHandler =
-  <TReq, TRes>(
-    requestSchema: Struct<TReq>,
-    responseSchema: Struct<TRes>,
-    handler: (request: TReq) => Promise<TRes>,
-  ) =>
-  async (req: NextApiRequest, res: NextApiResponse) => {
-    const [err, typedRequest] = requestSchema.validate(req.body, {
-      coerce: true,
-    })
-    if (err) {
-      res.status(400).send(err.message)
-      return
-    }
-
-    const response = await handler(typedRequest)
-
-    // Paranoia cause, javascript
-    if (!responseSchema.is(response)) {
-      res.status(500).send('Server returned bad response')
-    }
-
-    res.json(response)
-  }
 
 export const makeClient =
   <TReq, TRes>(

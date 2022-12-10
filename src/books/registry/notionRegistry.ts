@@ -55,13 +55,28 @@ const sanitizeDate = (date: string) => {
 
 const sanitizeCategory = (category: string) => category.replace(',', '-')
 
-export const registerBook = async (book: Book): Promise<boolean> => {
-  const notionApiKey = process.env.NOTION_API_KEY!
-  const databaseId = process.env.NOTION_DATABASE_ID!
-
-  const client = new Client({
-    auth: notionApiKey,
+// TODO: This picks the first shared DB regardless of shape, hacky hacky
+const getFirstDatabaseId = async (notionClient: Client) => {
+  const dbResult = await notionClient.search({
+    filter: { property: 'object', value: 'database' },
   })
+
+  if (dbResult.results.length) {
+    return dbResult.results[0].id
+  } else {
+    throw new Error('No databases found')
+  }
+}
+
+export const registerBook = async (
+  book: Book,
+  accessToken: string,
+): Promise<boolean> => {
+  const client = new Client({
+    auth: accessToken,
+  })
+
+  const databaseId = await getFirstDatabaseId(client)
   const existing = await client.databases.query({
     database_id: databaseId,
     filter: { property: 'ISBN', rich_text: { equals: book.isbn } },
