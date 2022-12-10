@@ -1,4 +1,4 @@
-import { makeHandler } from '@/utils/apis'
+import { makeHandler } from '@/utils/apis/makeHandler'
 import {
   registerBookRequestSchema,
   registerBookResponseSchema,
