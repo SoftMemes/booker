@@ -1,11 +1,11 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   BookImportState,
   useBookImporter,
 } from '@/books/importer/useBookImporter'
-import Scanner from '@/barcodes/Scanner'
+import Scanner from './components/barcodes/Scanner'
 
 function statusIcon(status: BookImportState['status']): string {
   switch (status) {
@@ -23,25 +23,36 @@ function statusIcon(status: BookImportState['status']): string {
 export default function Scan() {
   const { books, importBook } = useBookImporter()
   const scannerRef = useRef(null)
+  // HACK HACK HACK - Production builds fail to load Quagga due to some randomness, this forces the DOM stuff to load
+  // fully before starting to initialize media streams and other fun
+  const [hack, setHack] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+      setHack(true)
+    }, 500)
+  }, [])
+  console.log('ref', scannerRef)
 
   return (
-    <>
-      <div ref={scannerRef} style={{ border: '1px solid red' }}>
-        <Scanner
-          scannerRef={scannerRef}
-          onDetected={result => importBook(result)}
-          constraints={{
-            width: 1920,
-            height: 1920,
-          }}
-          locator={{
-            patchSize: 'small',
-            halfSample: true,
-          }}
-          facingMode="environment"
-        />
+    <div style={{ position: 'relative' }}>
+      <div ref={scannerRef}>
+        {hack && (
+          <Scanner
+            scannerRef={scannerRef}
+            onDetected={result => importBook(result)}
+            constraints={{
+              width: 1920,
+              height: 1920,
+            }}
+            locator={{
+              patchSize: 'small',
+              halfSample: true,
+            }}
+            facingMode="environment"
+          />
+        )}
       </div>
-      <div>
+      <div style={{ position: 'absolute', top: '20px', left: '20px' }}>
         <span>Last result:</span>
         <ul>
           {books.map(bs => (
@@ -52,6 +63,6 @@ export default function Scan() {
           ))}
         </ul>
       </div>
-    </>
+    </div>
   )
 }
