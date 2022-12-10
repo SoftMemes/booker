@@ -1,3 +1,5 @@
+'use client'
+
 // Lovingly borrowed (stolen) from https://github.com/ericblade/quagga2-react-example/blob/master/src/components/Scanner.js and tweaked
 import React, { useCallback, useLayoutEffect } from 'react'
 import Quagga, { QuaggaJSResultObject } from '@ericblade/quagga2'
@@ -60,6 +62,14 @@ export interface Props {
   locate?: boolean
 }
 
+const inferConcurrency = () => {
+  if (typeof window !== 'undefined') {
+    return window?.navigator?.hardwareConcurrency ?? 0
+  } else {
+    return 0
+  }
+}
+
 const Scanner = ({
   onDetected,
   scannerRef,
@@ -68,7 +78,7 @@ const Scanner = ({
   facingMode,
   constraints = defaultConstraints,
   locator = defaultLocatorSettings,
-  numOfWorkers = navigator.hardwareConcurrency || 0,
+  numOfWorkers = inferConcurrency(),
   decoders = defaultDecoders,
   locate = true,
 }: Props) => {
