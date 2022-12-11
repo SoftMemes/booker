@@ -8,13 +8,17 @@ export default function SignIn() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      console.log('No JWT')
-      console.log(status)
       void signIn('notion')
     } else if (status === 'authenticated') {
       void router.push('/')
     }
   }, [status])
 
-  return <div>Sending you to Notion to authenticate ...</div>
+  return (
+    <div>
+      {status === 'unauthenticated'
+        ? 'Sending you to Notion to authenticate ...'
+        : 'Thank you for logging in'}
+    </div>
+  )
 }

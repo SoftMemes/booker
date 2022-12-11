@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import { Struct } from 'superstruct'
 import { Session } from 'next-auth'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -11,26 +12,31 @@ export const makeHandler =
     handler: (request: TReq, session: Session) => Promise<TRes>,
   ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
-    const session = await unstable_getServerSession(req, res, authOptions)
-    if (!session) {
-      res.status(401).send('Not authenticated')
-      return
+    try {
+      const session = await unstable_getServerSession(req, res, authOptions)
+      if (!session) {
+        res.status(401).send('Not authenticated')
+        return
+      }
+
+      const [err, typedRequest] = requestSchema.validate(req.body, {
+        coerce: true,
+      })
+      if (err) {
+        res.status(400).send(err.message)
+        return
+      }
+
+      const response = await handler(typedRequest, session)
+
+      // Paranoia cause, javascript
+      if (!responseSchema.is(response)) {
+        throw new Error('Server attempted to send malformed response')
+      }
+
+      res.json(response)
+    } catch (err) {
+      Sentry.captureException(err)
+      throw err
     }
-
-    const [err, typedRequest] = requestSchema.validate(req.body, {
-      coerce: true,
-    })
-    if (err) {
-      res.status(400).send(err.message)
-      return
-    }
-
-    const response = await handler(typedRequest, session)
-
-    // Paranoia cause, javascript
-    if (!responseSchema.is(response)) {
-      res.status(500).send('Server returned bad response')
-    }
-
-    res.json(response)
   }
