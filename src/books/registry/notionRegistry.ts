@@ -66,6 +66,8 @@ const sanitizeDate = (date: string) => {
 
 const sanitizeAuthor = (category: string) => category.replace(',', ' ')
 
+const sanitizePublisher = (category: string) => category.replace(',', ' ')
+
 const sanitizeCategory = (category: string) => category.replace(',', '-')
 
 // TODO: This picks the first shared DB regardless of shape, hacky hacky
@@ -98,7 +100,9 @@ export const registerBook = async (
   const properties = {
     Title: makeTitle(book.title),
     ISBN: makeText(book.isbn),
-    Publisher: book.publisher ? makeSelect(book.publisher) : undefined,
+    Publisher: book.publisher
+      ? makeSelect(sanitizePublisher(book.publisher))
+      : undefined,
     Authors: makeMultiSelect(
       book.authors.map(author => sanitizeAuthor(author)),
     ),
