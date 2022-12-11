@@ -31,7 +31,6 @@ export default function Scan() {
       setHack(true)
     }, 500)
   }, [])
-  console.log('ref', scannerRef)
 
   return (
     <div style={{ position: 'relative' }}>
@@ -52,8 +51,7 @@ export default function Scan() {
           />
         )}
       </div>
-      <div style={{ position: 'absolute', top: '20px', left: '20px' }}>
-        <span>Last result:</span>
+      <div>
         <ul>
           {books.map(bs => (
             <li key={bs.isbn}>

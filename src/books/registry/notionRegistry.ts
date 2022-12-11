@@ -1,5 +1,8 @@
+import * as Sentry from '@sentry/nextjs'
 import { Client } from '@notionhq/client'
+import formatISO from 'date-fns/formatISO'
 import { Book } from '../book'
+import { parseMultiple } from '@/utils/dates'
 
 const makeText = (text: string) => ({
   rich_text: [
@@ -33,23 +36,30 @@ const makeMultiSelect = (names: string[]) => ({
   })),
 })
 
-const makeDate = (date: string) => ({
-  date: {
-    start: date,
-  },
-})
+const makeDate = (date: string | null | undefined) =>
+  date
+    ? {
+        date: {
+          start: date,
+        },
+      }
+    : undefined
 
 const sanitizeDate = (date: string) => {
-  const dateBits = date.split('-')
+  if (!date) {
+    return undefined
+  }
 
-  if (dateBits.length === 3) {
-    return date
-  } else if (dateBits.length === 2) {
-    return `${dateBits[0]}-${dateBits[1]}-01`
-  } else if (dateBits.length === 1) {
-    return `${dateBits[0]}-01-01`
+  const parsedDate = parseMultiple(
+    date,
+    ['yyyy-MM-dd', 'yyyy-M-d', 'yyyy-MM', 'yyyy', 'MMM dd, yyyy', 'MMM, yyyy'],
+    new Date('2022-01-01'),
+  )
+  if (parsedDate) {
+    return formatISO(parsedDate, { representation: 'date' })
   } else {
-    throw new Error('Invalid date: ' + date)
+    Sentry.captureMessage(`Rejecting date in unsupported format: ${date}`)
+    return undefined
   }
 }
 
