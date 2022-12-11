@@ -16,7 +16,9 @@ export default function SignIn() {
 
   return (
     <div>
-      {status === 'unauthenticated'
+      {status === 'loading'
+        ? '...'
+        : status === 'unauthenticated'
         ? 'Sending you to Notion to authenticate ...'
         : 'Thank you for logging in'}
     </div>
