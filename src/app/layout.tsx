@@ -1,5 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css'
 import '../../styles/globals.css'
+import { GoogleAnalyticsTag } from '@/utils/analytics/GoogleAnalyticsTag'
 
 export default function RootLayout({
   children,
@@ -10,6 +11,7 @@ export default function RootLayout({
     <html>
       <head />
       <body>{children}</body>
+      <GoogleAnalyticsTag />
     </html>
   )
 }
