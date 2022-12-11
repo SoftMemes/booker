@@ -8,7 +8,8 @@ const makeText = (text: string) => ({
   rich_text: [
     {
       text: {
-        content: text,
+        content:
+          text.length > 2000 ? text.substring(0, 2000 - 3) + '...' : text,
       },
     },
   ],
