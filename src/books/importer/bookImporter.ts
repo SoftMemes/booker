@@ -8,7 +8,7 @@ export const importBookInfo = async (isbn: string): Promise<Book> => {
   return {
     isbn,
     title: result.title,
-    authors: result.authors,
+    authors: result.authors ?? [],
     categories: result.categories,
     description: result.description,
     thumbnailUrl: result.imageLinks?.thumbnail,
