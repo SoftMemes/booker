@@ -16,5 +16,6 @@ export const importBookInfo = async (isbn: string): Promise<Book> => {
     pageCount: result.pageCount,
     publisher: result.publisher,
     publishedDate: result.publishedDate,
+    format: 'Book',
   }
 }

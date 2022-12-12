@@ -9,4 +9,5 @@ export interface Book {
   publishedDate: string
   publisher?: string
   title: string
+  format: string
 }

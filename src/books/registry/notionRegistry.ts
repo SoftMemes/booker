@@ -112,8 +112,11 @@ export const registerBook = async (
           book.categories.map(category => sanitizeCategory(category)),
         )
       : undefined,
-    'Published Date': makeDate(sanitizeDate(book.publishedDate)),
-    Language: makeSelect(book.language),
+    'Published Date': book.publishedDate
+      ? makeDate(sanitizeDate(book.publishedDate))
+      : undefined,
+    Language: book.language ? makeSelect(book.language) : undefined,
+    Format: book.format ? makeSelect(book.format) : undefined,
   }
 
   if (existing.results.length) {

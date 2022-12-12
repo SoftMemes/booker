@@ -7,11 +7,12 @@ export const registerBookRequestSchema = object({
   categories: optional(array(string())),
   description: optional(string()),
   thumbnailUrl: optional(string()),
-  language: string(),
+  language: optional(string()),
   pageCount: optional(number()),
-  publishedDate: string(),
+  publishedDate: optional(string()),
   publisher: optional(string()),
   title: string(),
+  format: optional(string()),
 })
 
 export const registerBookResponseSchema = object({
